@@ -6,10 +6,12 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "proxy": "http://localhost:6000"
   },
   "dependencies": {
     "@expo/webpack-config": "^19.0.0",
+    "@react-native-picker/picker": "^2.5.1",
     "axios": "^1.5.0",
     "expo": "~49.0.12",
     "expo-status-bar": "~1.6.0",

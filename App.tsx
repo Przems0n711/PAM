@@ -24,15 +24,14 @@ class App extends Component {
     renderClubData() {
         if (this.state.selectedClub) {
             const selectedTeam = this.state.tableData.find(
-                team => team.team_name === this.state.selectedClub
+                ({team_name}) => team_name === this.state.selectedClub
             );
 
-            return (
-                <View>
-                    <Text>Nazwa klubu: {selectedTeam.team_name}</Text>
-                    <Text>Punkty: {selectedTeam.total_points}</Text>
-                </View>
-            );
+            let view = <><View>
+                <Text>Nazwa klubu: {selectedTeam.team_name}</Text>
+                <Text>Punkty: {selectedTeam.total_points}</Text>
+            </View></>;
+            return view;
         } else {
             return <Text>Wybierz klub z listy powyżej, aby zobaczyć dane.</Text>;
         }
@@ -50,8 +49,8 @@ class App extends Component {
                     {this.state.tableData.map((item, index) => (
                         <Picker.Item
                             key={index}
-                            label={item.team_name}
-                            value={item.team_name}
+                            label={item["team_name"]}
+                            value={item["team_name"]}
                         />
                     ))}
                 </Picker>

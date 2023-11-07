@@ -1,7 +1,15 @@
-import axios from 'axios';
 import React, { Component } from 'react';
-import { View, Text} from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import axios from 'axios';
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'flex-start',
+        padding: 20,
+    },
+});
 
 class App extends Component {
     state = {
@@ -12,11 +20,11 @@ class App extends Component {
     componentDidMount() {
         axios
             .get('https://www.thesportsdb.com/api/v1/json/3/search_all_teams.php?l=Polish%20Ekstraklasa')
-            .then(response => {
+            .then((response) => {
                 const tableData = response.data.teams;
                 this.setState({ tableData });
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error('Błąd podczas pobierania danych:', error);
             });
     }
@@ -24,34 +32,34 @@ class App extends Component {
     renderClubData() {
         if (this.state.selectedClub) {
             const selectedTeam = this.state.tableData.find(
-                ({team_name}) => team_name === this.state.selectedClub
+                ({ team_name }) => team_name === this.state.selectedClub
             );
 
-            let view = <><View>
-                <Text>Nazwa klubu: {selectedTeam.team_name}</Text>
-                <Text>Punkty: {selectedTeam.total_points}</Text>
-            </View></>;
-            return view;
-        } else {
-            return <Text>Wybierz klub z listy powyżej, aby zobaczyć dane.</Text>;
+            if (selectedTeam) {
+                return (
+                    <View>
+                        <Text>Nazwa klubu: {selectedTeam.strTeam}</Text>
+                        <Text>Informacje o klubie: {selectedTeam.strDescriptionEN}</Text>
+                    </View>
+                );
+            } else {
+                return <Text>Nie znaleziono informacji o klubie.</Text>;
+            }
         }
+        return <Text>Wybierz klub z listy powyżej, aby zobaczyć dane.</Text>;
     }
 
     render() {
         return (
-            <View>
-                <Text>Dane Ekstraklasy:</Text>
+            <View style={styles.container}>
                 <Picker
                     selectedValue={this.state.selectedClub}
                     onValueChange={(itemValue, itemIndex) =>
                         this.setState({ selectedClub: itemValue })
-                    }>
+                    }
+                >
                     {this.state.tableData.map((item, index) => (
-                        <Picker.Item
-                            key={index}
-                            label={item["team_name"]}
-                            value={item["team_name"]}
-                        />
+                        <Picker.Item key={index} label={item.strTeam} value={item.strTeam} />
                     ))}
                 </Picker>
                 {this.renderClubData()}

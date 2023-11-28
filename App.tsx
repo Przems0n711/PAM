@@ -25,40 +25,42 @@ class App extends Component {
                 this.setState({ tableData });
             })
             .catch((error) => {
-                console.error('Błąd podczas pobierania danych:', error);
+                console.error('Error while downloading data:', error);
             });
     }
 
     renderClubData() {
-        if (this.state.selectedClub) {
-            const selectedTeam = this.state.tableData.find(
-                ({ team_name }) => team_name === this.state.selectedClub
-            );
+        const { selectedClub, tableData } = this.state;
+
+        if (selectedClub) {
+            const selectedTeam = tableData.find(({ strTeam }) => strTeam === selectedClub);
 
             if (selectedTeam) {
                 return (
                     <View>
-                        <Text>Nazwa klubu: {selectedTeam.strTeam}</Text>
-                        <Text>Informacje o klubie: {selectedTeam.strDescriptionEN}</Text>
+                        <Text>Club name: {selectedTeam.strTeam}</Text>
+                        <Text>Information about the club: {selectedTeam.strDescriptionEN}</Text>
                     </View>
                 );
             } else {
-                return <Text>Nie znaleziono informacji o klubie.</Text>;
+                return <Text>Information about the club was not found.</Text>;
             }
         }
-        return <Text>Wybierz klub z listy powyżej, aby zobaczyć dane.</Text>;
+
+        return <Text>Select a club from the list above to see the data.</Text>;
     }
 
+    handleClubChange = (itemValue, itemIndex) => {
+        this.setState({ selectedClub: itemValue });
+    };
+
     render() {
+        const { tableData, selectedClub } = this.state;
+
         return (
             <View style={styles.container}>
-                <Picker
-                    selectedValue={this.state.selectedClub}
-                    onValueChange={(itemValue, itemIndex) =>
-                        this.setState({ selectedClub: itemValue })
-                    }
-                >
-                    {this.state.tableData.map((item, index) => (
+                <Picker selectedValue={selectedClub} onValueChange={this.handleClubChange}>
+                    {tableData.map((item, index) => (
                         <Picker.Item key={index} label={item.strTeam} value={item.strTeam} />
                     ))}
                 </Picker>

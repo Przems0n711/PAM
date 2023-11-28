@@ -1,10 +1,9 @@
 # PAM
-Aplikacja do sprawdzania tabeli i meczy w Ekstraklasie
+Aplikacja do sprawdzania obecnych klubów ekstraklasy i ich informacji.
 
-Aplikacja bedzie posiadać 2 zakładki:
-- Obecna Tabela
-- Ostatnie / Nadchodzące Mecze
+Aplikacja bedzie posiadać zakładkę:
+- Wybierz klub
 
-w tych 2 zakładkach będziemy mogli sprawdzać obecną tabelę w ekstraklasie oraz ostatnie mecze i ich wyniki.
+User będzie mógł wybrać dany klub w obecnym sezonie ekstraklasy, i dowiedzieć się o nim ciekawych informacji.
 
-Będzie ona działać wraz z API do wyników i tabel Ekstraklasy
+Będzie ona działać wraz z API do obecnych klubów ekstraklasy i ich informacji.

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 
@@ -8,6 +8,26 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-start',
         padding: 20,
+        backgroundColor: '#222',
+        color: '#fff',
+    },
+    picker: {
+        color: '#fff',
+        backgroundColor: '#333',
+        borderRadius: 8,
+        marginBottom: 20,
+    },
+    clubInfo: {
+        marginTop: 20,
+    },
+    clubName: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#fff',
+        marginBottom: 10,
+    },
+    clubDescription: {
+        color: '#ccc',
     },
 });
 
@@ -37,17 +57,20 @@ class App extends Component {
 
             if (selectedTeam) {
                 return (
-                    <View>
-                        <Text>Club name: {selectedTeam.strTeam}</Text>
-                        <Text>Information about the club: {selectedTeam.strDescriptionEN}</Text>
-                    </View>
+                    <ScrollView style={styles.clubInfo}>
+                        <View>
+                            <Text style={styles.clubName}>Club name: {selectedTeam.strTeam}</Text>
+                            <Text style={styles.clubDescription}>Information about the club: {selectedTeam.strDescriptionEN}
+                            </Text>
+                        </View>
+                    </ScrollView>
                 );
             } else {
-                return <Text>Information about the club was not found.</Text>;
+                return <Text style={styles.clubDescription}>Information about the club was not found.</Text>;
             }
         }
 
-        return <Text>Select a club from the list above to see the data.</Text>;
+        return <Text style={styles.clubDescription}>Select a club from the list above to see the data.</Text>;
     }
 
     handleClubChange = (itemValue, itemIndex) => {
@@ -59,7 +82,10 @@ class App extends Component {
 
         return (
             <View style={styles.container}>
-                <Picker selectedValue={selectedClub} onValueChange={this.handleClubChange}>
+                <Picker
+                    style={styles.picker}
+                    selectedValue={selectedClub}
+                    onValueChange={this.handleClubChange}>
                     {tableData.map((item, index) => (
                         <Picker.Item key={index} label={item.strTeam} value={item.strTeam} />
                     ))}

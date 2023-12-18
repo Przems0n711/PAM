@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Animated, Easing } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 
@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
     },
     clubInfo: {
         marginTop: 20,
+        opacity: 0,
     },
     clubName: {
         fontSize: 18,
@@ -35,6 +36,7 @@ class App extends Component {
     state = {
         tableData: [],
         selectedClub: null,
+        fadeAnim: new Animated.Value(0),
     };
 
     componentDidMount() {
@@ -49,33 +51,53 @@ class App extends Component {
             });
     }
 
+    fadeIn() {
+        Animated.timing(this.state.fadeAnim, {
+            toValue: 1,
+            duration: 500,
+            easing: Easing.inOut(Easing.ease),
+            useNativeDriver: true,
+        }).start();
+    }
+
+    handleClubChange = (itemValue, itemIndex) => {
+        this.setState({ selectedClub: itemValue, fadeAnim: new Animated.Value(0) }, () => {
+            this.fadeIn(); // Call fadeIn after updating the state
+        });
+    };
+
     renderClubData() {
-        const { selectedClub, tableData } = this.state;
+        const { selectedClub, tableData, fadeAnim } = this.state;
 
         if (selectedClub) {
             const selectedTeam = tableData.find(({ strTeam }) => strTeam === selectedClub);
 
             if (selectedTeam) {
                 return (
-                    <ScrollView style={styles.clubInfo}>
+                    <Animated.ScrollView style={[styles.clubInfo, { opacity: fadeAnim }]}>
                         <View>
                             <Text style={styles.clubName}>Club name: {selectedTeam.strTeam}</Text>
-                            <Text style={styles.clubDescription}>Information about the club: {selectedTeam.strDescriptionEN}
+                            <Text style={styles.clubDescription}>
+                                Information about the club: {selectedTeam.strDescriptionEN}
                             </Text>
                         </View>
-                    </ScrollView>
+                    </Animated.ScrollView>
                 );
             } else {
-                return <Text style={styles.clubDescription}>Information about the club was not found.</Text>;
+                return (
+                    <Animated.Text style={[styles.clubDescription, { opacity: fadeAnim }]}>
+                        Information about the club was not found.
+                    </Animated.Text>
+                );
             }
         }
 
-        return <Text style={styles.clubDescription}>Select a club from the list above to see the data.</Text>;
+        return (
+            <Animated.Text style={[styles.clubDescription, { opacity: fadeAnim }]}>
+                Select a club from the list above to see the data.
+            </Animated.Text>
+        );
     }
-
-    handleClubChange = (itemValue, itemIndex) => {
-        this.setState({ selectedClub: itemValue });
-    };
 
     render() {
         const { tableData, selectedClub } = this.state;
@@ -85,7 +107,8 @@ class App extends Component {
                 <Picker
                     style={styles.picker}
                     selectedValue={selectedClub}
-                    onValueChange={this.handleClubChange}>
+                    onValueChange={this.handleClubChange}
+                >
                     {tableData.map((item, index) => (
                         <Picker.Item key={index} label={item.strTeam} value={item.strTeam} />
                     ))}

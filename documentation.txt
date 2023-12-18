@@ -1,0 +1,2 @@
+cd testapp
+npx run expo

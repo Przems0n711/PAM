@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView, Animated, Easing } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Animated, Easing, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 import axios from 'axios';
+import Info from './Info';
 
 const styles = StyleSheet.create({
     container: {
@@ -29,6 +32,18 @@ const styles = StyleSheet.create({
     },
     clubDescription: {
         color: '#ccc',
+    },
+    infoButton: {
+        position: 'absolute',
+        bottom: 20,
+        left: 20,
+        backgroundColor: '#333',
+        borderRadius: 50,
+        padding: 10,
+    },
+    infoButtonText: {
+        color: '#fff',
+        fontSize: 18,
     },
 });
 
@@ -104,19 +119,31 @@ class App extends Component {
 
         return (
             <View style={styles.container}>
-                <Picker
-                    style={styles.picker}
-                    selectedValue={selectedClub}
-                    onValueChange={this.handleClubChange}
-                >
+                <Picker style={styles.picker} selectedValue={selectedClub} onValueChange={this.handleClubChange}>
                     {tableData.map((item, index) => (
                         <Picker.Item key={index} label={item.strTeam} value={item.strTeam} />
                     ))}
                 </Picker>
                 {this.renderClubData()}
+                <TouchableOpacity
+                    style={styles.infoButton}
+                    onPress={() => this.props.navigation.navigate('Info')}
+                >
+                    <Text style={styles.infoButtonText}>i</Text>
+                </TouchableOpacity>
             </View>
         );
     }
 }
 
-export default App;
+export default createAppContainer(
+    createStackNavigator(
+        {
+            Home: App,
+            Info: Info,
+        },
+        {
+            initialRouteName: 'Home',
+        }
+    )
+);

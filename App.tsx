@@ -62,7 +62,7 @@ class App extends Component {
 
     handleClubChange = (itemValue, itemIndex) => {
         this.setState({ selectedClub: itemValue, fadeAnim: new Animated.Value(0) }, () => {
-            this.fadeIn(); // Call fadeIn after updating the state
+            this.fadeIn();
         });
     };
 

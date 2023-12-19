@@ -11,5 +11,7 @@ Będzie ona działać wraz z API do obecnych klubów ekstraklasy i ich informacj
 # How to run app
 
 cd testapp
+
 npm i
+
 npx run expo

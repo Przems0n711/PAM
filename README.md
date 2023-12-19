@@ -8,7 +8,7 @@ User będzie mógł wybrać dany klub w obecnym sezonie ekstraklasy, i dowiedzie
 
 Będzie ona działać wraz z API do obecnych klubów ekstraklasy i ich informacji.
 
-#How to run app
+# How to run app
 
 cd testapp
 npm i

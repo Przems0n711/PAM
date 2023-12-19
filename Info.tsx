@@ -8,6 +8,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#222',
         color: '#fff',
+        marginTop: 0,
     },
     infoText: {
         color: '#fff',

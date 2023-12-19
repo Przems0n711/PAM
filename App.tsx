@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView, Animated, Easing, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Animated, Easing, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import axios from 'axios';
 import Info from './Info';
 
@@ -13,15 +13,21 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor: '#222',
         color: '#fff',
+        position: 'relative',
     },
     picker: {
+        position: 'absolute',
+        top: 20,
+        left: 20,
+        width: '75%',
         color: '#fff',
         backgroundColor: '#333',
         borderRadius: 8,
         marginBottom: 20,
+        zIndex: 1,
     },
     clubInfo: {
-        marginTop: 20,
+        marginTop: 65,
         opacity: 0,
     },
     clubName: {
@@ -33,13 +39,14 @@ const styles = StyleSheet.create({
     clubDescription: {
         color: '#ccc',
     },
-    infoButton: {
+    infoButtonContainer: {
         position: 'absolute',
-        bottom: 20,
-        left: 20,
+        top: 20,
+        right: 20,
         backgroundColor: '#333',
         borderRadius: 50,
         padding: 10,
+        zIndex: 1,
     },
     infoButtonText: {
         color: '#fff',
@@ -124,26 +131,41 @@ class App extends Component {
                         <Picker.Item key={index} label={item.strTeam} value={item.strTeam} />
                     ))}
                 </Picker>
-                {this.renderClubData()}
                 <TouchableOpacity
-                    style={styles.infoButton}
+                    style={styles.infoButtonContainer}
                     onPress={() => this.props.navigation.navigate('Info')}
                 >
-                    <Text style={styles.infoButtonText}>i</Text>
+                    <Text style={styles.infoButtonText}>♡</Text>
                 </TouchableOpacity>
+                {this.renderClubData()}
             </View>
         );
     }
 }
 
-export default createAppContainer(
-    createStackNavigator(
-        {
-            Home: App,
-            Info: Info,
-        },
-        {
-            initialRouteName: 'Home',
-        }
-    )
-);
+const Stack = createStackNavigator();
+
+function AppContainer() {
+    return (
+        <NavigationContainer>
+            <Stack.Navigator initialRouteName="Home">
+                <Stack.Screen
+                    name="Home"
+                    component={App}
+                    options={{
+                        headerShown: false,
+                    }}
+                />
+                <Stack.Screen
+                    name="Info"
+                    component={Info}
+                    options={{
+                        headerShown: false,
+                    }}
+                />
+            </Stack.Navigator>
+        </NavigationContainer>
+    );
+}
+
+export default AppContainer;
